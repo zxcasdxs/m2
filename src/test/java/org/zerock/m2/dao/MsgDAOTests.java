@@ -12,6 +12,11 @@ import java.util.stream.IntStream;
 public class MsgDAOTests {
 
     @Test
+    public void testread() {
+
+    }
+
+    @Test
     public void testInsertDummies() {
 
         IntStream.rangeClosed(1, 100).forEach(i -> {

@@ -19,6 +19,73 @@ public enum MsgDAO {
             "\twhom=? or who=?\n" +
             "order by kind asc, mno desc";
 
+    private static final String SQL_SELECT = "select mno, who, whom, content, regdate, opendate from tbl_msg where mno = ?";
+    private static final String SQL_UPDATE_NOW = "update tbl_msg set opendate = now() where mno = ?";
+    private static final String SQL_REMOVE = "delete from tbl_msg where mno = ?";
+
+
+    public MsgDTO remove(Long mno) throws RuntimeException {
+
+        MsgDTO msgDTO = MsgDTO.builder()
+                .build();
+
+        new JdbcTemplate() {
+            @Override
+            protected void execute() throws Exception {
+
+                preparedStatement = connection.prepareStatement(SQL_REMOVE);
+                preparedStatement.setLong(1, mno);
+                preparedStatement.executeUpdate();
+
+                msgDTO.setMno(resultSet.getLong(1));
+                msgDTO.setWho(resultSet.getString(2));
+
+            }
+        }.makeAll();
+        return msgDTO;
+    }
+
+    public MsgDTO select(Long mno) throws RuntimeException {
+
+        MsgDTO msgDTO = MsgDTO.builder()
+                .build();
+
+        new JdbcTemplate() {
+            @Override
+            protected void execute() throws Exception {
+                
+                preparedStatement = connection.prepareStatement(SQL_UPDATE_NOW);
+                preparedStatement.setLong(1, mno);
+                preparedStatement.executeUpdate();
+                
+                preparedStatement.close();
+                preparedStatement=null; // GC 유도
+
+
+
+                preparedStatement = connection.prepareStatement(SQL_SELECT);
+                preparedStatement.setLong(1, mno);
+
+                resultSet = preparedStatement.executeQuery();
+                resultSet.next();
+
+                //mno, who, whom, content, regdate,
+                //opendate
+                msgDTO.setMno(resultSet.getLong(1));
+                msgDTO.setWho(resultSet.getString(2));
+                msgDTO.setWhom(resultSet.getString(3));
+                msgDTO.setContent(resultSet.getString(4));
+                msgDTO.setRegdate(resultSet.getTimestamp(5));
+
+                msgDTO.setOpendate(resultSet.getTimestamp(6));
+
+
+            }
+        }.makeAll();
+        return msgDTO;
+    }
+
+
     public void insert(MsgDTO msgDTO) throws RuntimeException {
 
         new JdbcTemplate() {
