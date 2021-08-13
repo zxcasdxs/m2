@@ -22,10 +22,17 @@ public class RemoveController extends HttpServlet {
         Long mno = Long.parseLong(request.getParameter("mno"));
         String who = request.getParameter("who");
 
+        MsgDTO msgDTO = MsgDTO.builder()
+                .mno(mno)
+                .who(who)
+                .build();
+
         log.info("mno : " + mno);
         log.info("who : " + who);
 
-        MsgService.INSTANCE.remove(mno);
+
+
+        MsgService.INSTANCE.remove(msgDTO);
 
         response.sendRedirect("/msg/list?whom=" + who);
 

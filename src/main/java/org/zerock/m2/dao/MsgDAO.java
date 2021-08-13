@@ -21,10 +21,10 @@ public enum MsgDAO {
 
     private static final String SQL_SELECT = "select mno, who, whom, content, regdate, opendate from tbl_msg where mno = ?";
     private static final String SQL_UPDATE_NOW = "update tbl_msg set opendate = now() where mno = ?";
-    private static final String SQL_REMOVE = "delete from tbl_msg where mno = ?";
+    private static final String SQL_REMOVE = "delete from tbl_msg where mno = ? and who = ?";
 
 
-    public MsgDTO remove(Long mno) throws RuntimeException {
+    public MsgDTO remove(Long mno, String who) throws RuntimeException {
 
         MsgDTO msgDTO = MsgDTO.builder()
                 .build();
@@ -35,10 +35,9 @@ public enum MsgDAO {
 
                 preparedStatement = connection.prepareStatement(SQL_REMOVE);
                 preparedStatement.setLong(1, mno);
+                preparedStatement.setString(2, who);
                 preparedStatement.executeUpdate();
 
-                msgDTO.setMno(resultSet.getLong(1));
-                msgDTO.setWho(resultSet.getString(2));
 
             }
         }.makeAll();

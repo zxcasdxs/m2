@@ -35,7 +35,7 @@
             <form action="/msg/register" method="post">
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="basic-addon1">WHO</span>
-                    <input type="text" name="who" class="form-control" placeholder="who" aria-label="Username" aria-describedby="basic-addon1">
+                    <input type="text" name="who" value="${member.mid}" readonly class="form-control" placeholder="who" aria-label="Username" aria-describedby="basic-addon1">
                 </div>
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="basic-addon2">WHOM</span>

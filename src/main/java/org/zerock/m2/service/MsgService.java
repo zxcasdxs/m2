@@ -12,9 +12,9 @@ public enum MsgService {
 
     INSTANCE;
 
-    public MsgDTO remove(Long mno) throws RuntimeException {
+    public MsgDTO remove(MsgDTO msgDTO) throws RuntimeException {
 
-        return MsgDAO.INSTANCE.remove(mno);
+         return MsgDAO.INSTANCE.remove(msgDTO.getMno(), msgDTO.getWho());
     }
 
     public MsgDTO read(Long mno) throws RuntimeException {

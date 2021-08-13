@@ -1,6 +1,7 @@
 package org.zerock.m2.controller;
 
 import lombok.extern.log4j.Log4j2;
+import org.zerock.m2.dto.MemberDTO;
 import org.zerock.m2.dto.MsgDTO;
 import org.zerock.m2.service.MsgService;
 
@@ -20,7 +21,17 @@ public class ListController extends HttpServlet {
 
         log.info("list controller doGet.................");
 
-        String user = request.getParameter("whom");
+        //로그인 체크 로직
+        HttpSession session  =request.getSession();
+        Object memberObj = session.getAttribute("member");
+        //로그인 관련 정보 없음 - 로그인 안한(실패한) 사용자
+        if(memberObj == null) {
+            response.sendRedirect("/login");
+            return;
+        }
+        MemberDTO memberDTO = (MemberDTO)memberObj;
+
+        String user = memberDTO.getMid();
 
         Map<String, List<MsgDTO>> result = MsgService.INSTANCE.getList(user);
 
